@@ -3,7 +3,41 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CharacterName
+  - Background
+  - Class
+  - Species
+  - Subclass
+  - Level
+  - Xp
+  - Ac
+  - HitPointsCurrent
+  - HitPointsMax
+  - HitPointsTemp
+  - HitDiceSpent
+  - HitDiceMax
+  - ProficiencyBonus
+  - Initiative
+  - Speed
+  - Strength
+  - Intelligence
+  - Dexterity
+  - Wisdom
+  - Constitution
+  - Charisma
+  - Modifier
+  - Score
+  - SavingThrow
+  - Acrobatics
+  - AnimalHandling
+  - Arcana
+  - Athletics
+  - Deception
+  - History
+  - Insight
+  - Intimidation
+  - Investigation
   layers:
   - Default
   - TransparentFX

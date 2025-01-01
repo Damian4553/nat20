@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ScaleDragAndSnap : MonoBehaviour
@@ -27,40 +28,41 @@ public class ScaleDragAndSnap : MonoBehaviour
             snap = true;
         }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 mousePosition = GetMouseWorldPosition();
-            scaleDirection = CalculateScaleDirection(mousePosition);
-
-            if (scaleDirection != Vector2.zero)
-            {
-                StartScaling(mousePosition);
-            }
-            else
-            {
-                StartDragging();
-            }
-        }
-
-        if (isScaling && Input.GetMouseButton(0))
+        if (isScaling)
         {
             PerformScaling();
         }
-        else if (isDragging && Input.GetMouseButton(0))
+        else if (isDragging)
         {
             PerformDragging();
         }
+        
+    }
 
-        if (Input.GetMouseButtonUp(0))
+    private void OnMouseDown()
+    {
+        Vector3 mousePosition = GetMouseWorldPosition();
+        scaleDirection = CalculateScaleDirection(mousePosition);
+
+        if (scaleDirection != Vector2.zero)
         {
-            if (isScaling)
-            {
-                StopScaling();
-            }
-            else if (isDragging)
-            {
-                StopDragging();
-            }
+            StartScaling(mousePosition);
+        }
+        else
+        {
+            StartDragging();
+        }
+    }
+
+    private void OnMouseUp()
+    {
+        if (isScaling)
+        {
+            StopScaling();
+        }
+        else if (isDragging)
+        {
+            StopDragging();
         }
     }
 
