@@ -515,6 +515,7 @@ GameObject:
   - component: {fileID: 1235763158426053375}
   - component: {fileID: 2935087661260351903}
   - component: {fileID: 8722219986602993937}
+  - component: {fileID: 1953852255380529329}
   m_Layer: 0
   m_Name: BackGroundImagePlaceHolder
   m_TagString: Untagged
@@ -586,8 +587,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.2688679, b: 0.2688679, a: 1}
+  m_Sprite: {fileID: 6536930866016440047, guid: 9d70e4070c05845438f0a3ee69e9523b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -610,6 +611,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
+  edgeThreshold: 0.2
+  snapLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!65 &1953852255380529329
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7929253842022645208}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8103160436716632355
 GameObject:
   m_ObjectHideFlags: 0

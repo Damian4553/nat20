@@ -43,7 +43,11 @@ public class DragAndSnap : MonoBehaviour
 
     void OnMouseDown()
     {
-        // Start dragging the object
+        // Prevent dragging if the mouse is over a UI element
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        // Start dragging the object if it belongs to the "Token" layer
         if (gameObject.layer == LayerMask.NameToLayer("Token"))
         {
             isDragging = true;

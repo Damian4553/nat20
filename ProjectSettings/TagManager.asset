@@ -38,6 +38,8 @@ TagManager:
   - Insight
   - Intimidation
   - Investigation
+  - Manager
+  - difficultTerrain
   layers:
   - Default
   - TransparentFX

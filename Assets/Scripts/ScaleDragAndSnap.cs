@@ -6,6 +6,8 @@ public class ScaleDragAndSnap : MonoBehaviour
     [SerializeField] private Camera mainCamera; // Assign your main camera in the Inspector
     [SerializeField] private float edgeThreshold = 0.1f; // Edge detection threshold (in local scale units)
     [SerializeField] private LayerMask snapLayer; // Layer mask for objects to snap to (set in inspector)
+    [SerializeField] private LayerMask interactableLayer; // Assign this in the Inspector
+
 
     private bool isScaling = false;
     private bool isDragging = false;
@@ -38,21 +40,30 @@ public class ScaleDragAndSnap : MonoBehaviour
         }
         
     }
-
     private void OnMouseDown()
     {
-        Vector3 mousePosition = GetMouseWorldPosition();
-        scaleDirection = CalculateScaleDirection(mousePosition);
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
 
-        if (scaleDirection != Vector2.zero)
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, interactableLayer))
         {
-            StartScaling(mousePosition);
-        }
-        else
-        {
-            StartDragging();
+            Vector3 mousePosition = GetMouseWorldPosition();
+            scaleDirection = CalculateScaleDirection(mousePosition);
+
+            if (scaleDirection != Vector2.zero)
+            {
+                StartScaling(mousePosition);
+            }
+            else
+            {
+                StartDragging();
+            }
         }
     }
+
 
     private void OnMouseUp()
     {

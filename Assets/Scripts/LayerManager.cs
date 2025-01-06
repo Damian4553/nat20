@@ -1,94 +1,102 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LayerManager : MonoBehaviour
 {
-    // The parent object whose children will be made transparent
-    [SerializeField] private GameObject parentObjectDisable;
-    [SerializeField] private GameObject parentObjectEneble;
+    [SerializeField] private GameObject tokenLayer;
+    [SerializeField] private GameObject gmLayer;
+    [SerializeField] private GameObject mapLayer;
 
-    // The transparency level (0 = fully transparent, 1 = fully opaque)
+    [SerializeField] private Button tokenButton;
+    [SerializeField] private Button gmButton;
+    [SerializeField] private Button mapButton;
+
     [Range(0f, 1f)] [SerializeField] private float transparency = 0.5f;
 
-    void Start()
+    private void Start()
     {
-        // Check if the parent object is assigned
-        if (parentObjectDisable != null)
-        {
-            // Get all child objects and set their transparency
-            SetChildrenTransparency(parentObjectDisable.transform, transparency); //off
-            TurnOffOnDragAndSnap(parentObjectDisable.transform, true);
+        // Assign button click events
+        tokenButton.onClick.AddListener(OnTokenButtonClick);
+        gmButton.onClick.AddListener(OnGMButtonClick);
+        mapButton.onClick.AddListener(OnMapButtonClick);
+        UpdateLayerState(mapLayer, false, false);
+        UpdateLayerState(gmLayer, false, false, transparency);
+        UpdateLayerState(tokenLayer, true, true, 1f);
 
-            SetChildrenTransparency(parentObjectEneble.transform, 1f); //on
-            TurnOffOnDragAndSnap(parentObjectEneble.transform, false);
-        }
-        else
-        {
-            Debug.LogWarning("Parent object is not assigned!");
-        }
     }
 
-    public void SetChildrenTransparency(Transform parent, float alpha)
+    private void OnTokenButtonClick()
     {
-        // Iterate through all child objects
-        foreach (Transform child in parent)
-        {
-            // Get the Renderer component of the child
-            Renderer renderer = child.GetComponent<Renderer>();
-
-            if (renderer != null)
-            {
-                // Iterate through all materials of the renderer
-                foreach (Material material in renderer.materials)
-                {
-                    // Ensure the material supports transparency
-                    if (material.HasProperty("_Color"))
-                    {
-                        // Get the current color and set the alpha value
-                        Color color = material.color;
-                        color.a = alpha;
-                        material.color = color;
-
-                        // Enable transparency on the material's shader if necessary
-                        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                        material.SetInt("_ZWrite", 0);
-                        material.DisableKeyword("_ALPHATEST_ON");
-                        material.EnableKeyword("_ALPHABLEND_ON");
-                        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                        material.renderQueue = 3000;
-                    }
-                }
-            }
-        }
+        UpdateLayerState(mapLayer, false, false);
+        UpdateLayerState(gmLayer, false, false, transparency);
+        UpdateLayerState(tokenLayer, true, true, 1f);
     }
 
-    void TurnOffOnDragAndSnap(Transform parent, bool turnOff = true)
+    private void OnGMButtonClick()
     {
-        // Iterate through all child objects
-        foreach (Transform child in parent)
+        UpdateLayerState(mapLayer, false, false);
+        UpdateLayerState(tokenLayer, false, false, transparency);
+        UpdateLayerState(gmLayer, true, true, 1f);
+    }
+
+    private void OnMapButtonClick()
+    {
+        UpdateLayerState(tokenLayer, false, false, transparency);
+        UpdateLayerState(gmLayer, false, false, transparency);
+        UpdateLayerState(mapLayer, true, true, 1f);
+    }
+
+    private void UpdateLayerState(GameObject layer, bool enableDragSnap, bool enableScaleDragSnap, float? alpha = null)
+    {
+        if (layer == null) return;
+
+        foreach (Transform child in layer.transform)
         {
-            // Get the DragAndSnap script component of the child
+            // Update DragAndSnap script
             var dragAndSnap = child.GetComponent<DragAndSnap>();
-
-            if (dragAndSnap != null && turnOff)
+            if (dragAndSnap != null)
             {
-                // Disable the DragAndSnap script
-                dragAndSnap.enabled = false;
+                dragAndSnap.enabled = enableDragSnap;
             }
 
-            if (dragAndSnap != null && !turnOff)
+            // Update ScaleDragAndSnap script
+            var scaleDragAndSnap = child.GetComponent<ScaleDragAndSnap>();
+            if (scaleDragAndSnap != null)
             {
-                // Enable the DragAndSnap script
-                dragAndSnap.enabled = true;
+                scaleDragAndSnap.enabled = enableScaleDragSnap;
             }
 
-
-            // Recursive call to handle nested children
-            if (child.childCount > 0)
+            // Update transparency
+            if (alpha.HasValue)
             {
-                TurnOffOnDragAndSnap(child, turnOff);
+                SetTransparency(child, alpha.Value);
+            }
+        }
+    }
+
+    private void SetTransparency(Transform child, float alpha)
+    {
+        Renderer renderer = child.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            foreach (Material material in renderer.materials)
+            {
+                if (material.HasProperty("_Color"))
+                {
+                    Color color = material.color;
+                    color.a = alpha;
+                    material.color = color;
+
+                    material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    material.SetInt("_ZWrite", 0);
+                    material.DisableKeyword("_ALPHATEST_ON");
+                    material.EnableKeyword("_ALPHABLEND_ON");
+                    material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    material.renderQueue = 3000;
+                }
             }
         }
     }
