@@ -104,7 +104,6 @@ public class MeasureArrow : MonoBehaviour
     {
         if (currentArrow == null)
         {
-            Debug.LogError("Arrow object is null.");
             return;
         }
 

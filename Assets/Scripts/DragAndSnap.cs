@@ -8,6 +8,7 @@ public class DragAndSnap : MonoBehaviour
     private Vector3 offset;
     private GameObject closestSnapObject;
     private bool snap = true;
+
     void Start()
     {
         // Get the main camera
@@ -30,8 +31,9 @@ public class DragAndSnap : MonoBehaviour
         {
             // Get the mouse position in world space
             var position = transform.position;
-            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.WorldToScreenPoint(position).z));
-        
+            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                Input.mousePosition.y, mainCamera.WorldToScreenPoint(position).z));
+
             // Update position, keeping the original Z-axis position
             position = new Vector3(mousePosition.x, mousePosition.y, position.z);
             transform.position = position;
@@ -72,7 +74,8 @@ public class DragAndSnap : MonoBehaviour
         Renderer objectRenderer = GetComponent<Renderer>();
         Bounds objectBounds = objectRenderer.bounds;
 
-        Collider[] colliders = Physics.OverlapSphere(new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z), .3f, snapLayer); // Radius of 10 units
+        Collider[] colliders =
+            Physics.OverlapSphere(new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z), .3f, snapLayer);
         float closestDistance = Mathf.Infinity;
 
         closestSnapObject = null;
@@ -94,19 +97,19 @@ public class DragAndSnap : MonoBehaviour
         {
             Renderer objectRenderer = GetComponent<Renderer>();
             Renderer targetRenderer = target.GetComponent<Renderer>();
-    
+
             if (objectRenderer != null && targetRenderer != null)
             {
                 Bounds objectBounds = objectRenderer.bounds;
                 Bounds targetBounds = targetRenderer.bounds;
-    
+
                 // Calculate the top-left corner of the object and grid
                 Vector3 objectTopLeft = new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z);
                 Vector3 gridTopLeft = new Vector3(targetBounds.min.x, targetBounds.max.y, transform.position.z);
-    
+
                 // Align object's top-left corner to grid's top-left corner
                 Vector3 snappingOffset = gridTopLeft - objectTopLeft;
-    
+
                 // Apply the offset
                 transform.position += snappingOffset;
             }
@@ -117,6 +120,4 @@ public class DragAndSnap : MonoBehaviour
             }
         }
     }
-
-    
 }

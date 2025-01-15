@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Token : MonoBehaviour
@@ -46,5 +48,10 @@ public class Token : MonoBehaviour
                 print("No size chosen");
                 break;
         }
+    }
+
+    public void TextUpdate(string newText)
+    {
+        gameObject.GetComponentInChildren<TextMeshProUGUI>().text = newText;
     }
 }

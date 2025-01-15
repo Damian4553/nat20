@@ -43,10 +43,10 @@ public class GridManager : MonoBehaviour
         Vector3 rowStartPosition = startPosition;
 
         
-        for (int i = 0; i < Mathf.Ceil(containerLocalScale.y); i++)
+        for (int row = 0; row < Mathf.Ceil(containerLocalScale.y); row++)
         {
             Vector3 position = rowStartPosition;
-            for (int ii = 0; ii < Mathf.Ceil(containerLocalScale.x); ii++)
+            for (int column = 0; column < Mathf.Ceil(containerLocalScale.x); column++)
             {
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity, container.transform);
                 tile.transform.localPosition = position;

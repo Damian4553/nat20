@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 1194383748655251373}
   - component: {fileID: 7645679105753892391}
   - component: {fileID: 8663240510285082898}
+  - component: {fileID: 1996841281741211641}
+  - component: {fileID: 8477435547566232990}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -112,4 +114,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorButton: {fileID: 0}
-  meassureButton: {fileID: 0}
+  measureButton: {fileID: 0}
+--- !u!114 &1996841281741211641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153821101326506031}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73cc9d74911bee458963b2fb2b59bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 518840360564457145, guid: d094b0aca9c120148afa96eb09bed96d, type: 3}
+--- !u!114 &8477435547566232990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153821101326506031}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ec6a5ea488af24482acc6aeab0f96a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layer:
+    serializedVersion: 2
+    m_Bits: 64

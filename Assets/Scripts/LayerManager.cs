@@ -12,6 +12,10 @@ public class LayerManager : MonoBehaviour
     [SerializeField] private Button tokenButton;
     [SerializeField] private Button gmButton;
     [SerializeField] private Button mapButton;
+    [SerializeField] private Button addButton;
+    [SerializeField] private Button destroyButton;
+
+    private int lastActiveLayer; // 1 = token, 2 = gm, 3 = map
 
     [Range(0f, 1f)] [SerializeField] private float transparency = 0.5f;
 
@@ -21,58 +25,114 @@ public class LayerManager : MonoBehaviour
         tokenButton.onClick.AddListener(OnTokenButtonClick);
         gmButton.onClick.AddListener(OnGMButtonClick);
         mapButton.onClick.AddListener(OnMapButtonClick);
-        UpdateLayerState(mapLayer, false, false);
-        UpdateLayerState(gmLayer, false, false, transparency);
-        UpdateLayerState(tokenLayer, true, true, 1f);
+        addButton.onClick.AddListener(OnAddButtonClick);
+        destroyButton.onClick.AddListener(OnDestroyButtonClick);
 
+        OnTokenButtonClick();
+    }
+
+    private void OnAddButtonClick()
+    {
+        if (gameObject.GetComponent<CreateToken>().enabled)
+        {
+            gameObject.GetComponent<CreateToken>().enabled = false;
+            switch (lastActiveLayer)
+            {
+                case 1:
+                    OnTokenButtonClick();
+                    break;
+                case 2:
+                    OnGMButtonClick();
+                    break;
+                case 3:
+                    OnMapButtonClick();
+                    break;
+            }
+        }
+        else
+        {
+            gameObject.GetComponent<CreateToken>().enabled = true;
+            gameObject.GetComponent<DestroyToken>().enabled = false;
+            UpdateLayerState(mapLayer, false, 1f);
+            UpdateLayerState(gmLayer, false, transparency);
+            UpdateLayerState(tokenLayer, false, 1f);
+        }
+    }
+    
+    private void OnDestroyButtonClick()
+    {
+        
+        if (gameObject.GetComponent<DestroyToken>().enabled)
+        {
+            gameObject.GetComponent<DestroyToken>().enabled = false;
+            switch (lastActiveLayer)
+            {
+                case 1:
+                    OnTokenButtonClick();
+                    break;
+                case 2:
+                    OnGMButtonClick();
+                    break;
+                case 3:
+                    OnMapButtonClick();
+                    break;
+            }
+        }
+        else
+        {
+            gameObject.GetComponent<DestroyToken>().enabled = true;
+            gameObject.GetComponent<CreateToken>().enabled = false;
+            UpdateLayerState(mapLayer, false, 1f);
+            UpdateLayerState(gmLayer, true, transparency);
+            UpdateLayerState(tokenLayer, true, 1f);
+        }
     }
 
     private void OnTokenButtonClick()
     {
-        UpdateLayerState(mapLayer, false, false);
-        UpdateLayerState(gmLayer, false, false, transparency);
-        UpdateLayerState(tokenLayer, true, true, 1f);
+        UpdateLayerState(mapLayer, false, 1f);
+        UpdateLayerState(gmLayer, false, transparency);
+        UpdateLayerState(tokenLayer, true, 1f);
+        lastActiveLayer = 1;
     }
 
     private void OnGMButtonClick()
     {
-        UpdateLayerState(mapLayer, false, false);
-        UpdateLayerState(tokenLayer, false, false, transparency);
-        UpdateLayerState(gmLayer, true, true, 1f);
+        UpdateLayerState(mapLayer, false, 1f);
+        UpdateLayerState(tokenLayer, false, transparency);
+        UpdateLayerState(gmLayer, true, 1f);
+        lastActiveLayer = 2;
     }
 
     private void OnMapButtonClick()
     {
-        UpdateLayerState(tokenLayer, false, false, transparency);
-        UpdateLayerState(gmLayer, false, false, transparency);
-        UpdateLayerState(mapLayer, true, true, 1f);
+        UpdateLayerState(tokenLayer, false, transparency);
+        UpdateLayerState(gmLayer, false, transparency);
+        UpdateLayerState(mapLayer, true, 1f);
+        lastActiveLayer = 3;
     }
 
-    private void UpdateLayerState(GameObject layer, bool enableDragSnap, bool enableScaleDragSnap, float? alpha = null)
+    private void UpdateLayerState(GameObject layer, bool enableColliders, float alpha)
     {
         if (layer == null) return;
 
         foreach (Transform child in layer.transform)
         {
-            // Update DragAndSnap script
-            var dragAndSnap = child.GetComponent<DragAndSnap>();
-            if (dragAndSnap != null)
+            // Update Collider state
+            var boxCollider = child.GetComponent<BoxCollider>();
+            if (boxCollider != null)
             {
-                dragAndSnap.enabled = enableDragSnap;
+                boxCollider.enabled = enableColliders;
             }
 
-            // Update ScaleDragAndSnap script
-            var scaleDragAndSnap = child.GetComponent<ScaleDragAndSnap>();
-            if (scaleDragAndSnap != null)
+            var circleCollider = child.GetComponent<CircleCollider2D>();
+            if (circleCollider != null)
             {
-                scaleDragAndSnap.enabled = enableScaleDragSnap;
+                circleCollider.enabled = enableColliders;
             }
 
             // Update transparency
-            if (alpha.HasValue)
-            {
-                SetTransparency(child, alpha.Value);
-            }
+            SetTransparency(child, alpha);
         }
     }
 

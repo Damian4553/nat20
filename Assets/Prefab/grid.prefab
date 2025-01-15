@@ -104,7 +104,7 @@ BoxCollider:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 2
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
@@ -123,8 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f2334d79f783b45bcb47ecbc7c800a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  measureArrow: {fileID: 1194383748655251373, guid: 651cdb0f3468a1d45b9fbb8b0585990b, type: 3}
-  measureFiledUiManager: {fileID: 7645679105753892391, guid: 651cdb0f3468a1d45b9fbb8b0585990b, type: 3}
   gridLayer:
     serializedVersion: 2
     m_Bits: 128
