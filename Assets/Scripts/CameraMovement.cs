@@ -1,20 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-     public float dragSpeed = 0.1f;         // Speed for dragging the camera
-    public float zoomSpeed = 5f;          // Speed for zooming in and out
-    public float minZoom = 2f;            // Minimum zoom level (for orthographic or field of view)
-    public float maxZoom = 50f;           // Maximum zoom level (for orthographic or field of view)
+    [SerializeField] private float dragSpeed = 0.1f; // Speed for dragging the camera
+    [SerializeField] private float zoomSpeed = 5f; // Speed for zooming in and out
+    [SerializeField] private float minZoom = 2f; // Minimum zoom level (for orthographic or field of view)
+    [SerializeField] private float maxZoom = 50f; // Maximum zoom level (for orthographic or field of view)
+    [SerializeField] private GameObject container;
 
-    private Vector3 dragOrigin;           // Tracks the initial position of the mouse during dragging
+    private Vector3 dragOrigin; // Tracks the initial position of the mouse during dragging
+    private Bounds cameraBounds;
+
+    private void Start()
+    {
+        if (container != null)
+        {
+            // Calculate the bounds of the border object
+            Renderer renderer = container.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                cameraBounds = renderer.bounds;
+            }
+        }
+    }
 
     void Update()
     {
         HandleDrag();
         HandleZoom();
+        ClampCameraPosition();
     }
 
     private void HandleDrag()
@@ -61,6 +78,29 @@ public class CameraMovement : MonoBehaviour
                 // Adjust the field of view for 3D cameras
                 cam.fieldOfView = Mathf.Clamp(cam.fieldOfView - scroll * zoomSpeed, minZoom, maxZoom);
             }
+        }
+    }
+    
+    private void ClampCameraPosition()
+    {
+        if (container == null) return;
+
+        Camera cam = GetComponent<Camera>();
+
+        if (cam.orthographic)
+        {
+            float camHeight = cam.orthographicSize * 2f;
+            float camWidth = camHeight * cam.aspect;
+
+            float moveRangeX = camWidth / 5f;
+            float moveRangeY = camHeight / 5f;
+
+            Vector3 newPosition = transform.position;
+
+            newPosition.x = Mathf.Clamp(newPosition.x, cameraBounds.min.x + moveRangeX, cameraBounds.max.x - moveRangeX);
+            newPosition.y = Mathf.Clamp(newPosition.y, cameraBounds.min.y + moveRangeY, cameraBounds.max.y - moveRangeY);
+
+            transform.position = newPosition;
         }
     }
 }
