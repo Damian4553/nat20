@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8663240510285082898}
   - component: {fileID: 1996841281741211641}
   - component: {fileID: 8477435547566232990}
+  - component: {fileID: 9016202477249690499}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -71,6 +72,9 @@ MonoBehaviour:
   tokenButton: {fileID: 0}
   gmButton: {fileID: 0}
   mapButton: {fileID: 0}
+  addButton: {fileID: 0}
+  destroyButton: {fileID: 0}
+  tokenManager: {fileID: 9016202477249690499}
   transparency: 0.5
 --- !u!114 &1194383748655251373
 MonoBehaviour:
@@ -128,6 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 518840360564457145, guid: d094b0aca9c120148afa96eb09bed96d, type: 3}
+  spawnLayerTransform: {fileID: 0}
 --- !u!114 &8477435547566232990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,3 +148,20 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &9016202477249690499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153821101326506031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad1e56ff77d46741a530399a1ed798c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokenLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  tokenLayerTransform: {fileID: 0}
+  gmLayerTransform: {fileID: 0}

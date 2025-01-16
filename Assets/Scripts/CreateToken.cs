@@ -11,10 +11,7 @@ public class CreateToken : MonoBehaviour
 
     void Start()
     {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main;
-        }
+        mainCamera = Camera.main;
     }
 
     void Update()

@@ -7,7 +7,8 @@ using UnityEngine;
 public class Token : MonoBehaviour
 {
     [SerializeField] private Size selectedSize;
-    private enum Size
+
+    public enum Size
     {
         Tiny,
         Small,
@@ -19,12 +20,12 @@ public class Token : MonoBehaviour
 
     void Start()
     {
-        Resize();
+        Resize(selectedSize);
     }
 
-    private void Resize()
+    public void Resize(Size size)
     {
-        switch (selectedSize)
+        switch (size)
         {
             case Size.Tiny:
                 gameObject.transform.localScale = new Vector3(.5f, .5f);

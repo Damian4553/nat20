@@ -5,7 +5,13 @@ using UnityEngine;
 public class DestroyToken : MonoBehaviour
 {
     [SerializeField] private LayerMask layer;
+    
+    private Camera mainCamera;
 
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -17,14 +23,13 @@ public class DestroyToken : MonoBehaviour
     void DetectAndDestroyPrefab()
     {
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
         
         if (hit.collider != null)
         {
-            Debug.Log(hit.collider.gameObject.layer);
             if ((layer.value & (1 << hit.collider.gameObject.layer)) != 0)
             {
                 Destroy(hit.collider.gameObject);

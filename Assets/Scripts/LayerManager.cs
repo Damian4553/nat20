@@ -14,6 +14,9 @@ public class LayerManager : MonoBehaviour
     [SerializeField] private Button mapButton;
     [SerializeField] private Button addButton;
     [SerializeField] private Button destroyButton;
+    
+    [SerializeField] private TokenManager tokenManager;
+
 
     private int lastActiveLayer; // 1 = token, 2 = gm, 3 = map
 
@@ -27,9 +30,29 @@ public class LayerManager : MonoBehaviour
         mapButton.onClick.AddListener(OnMapButtonClick);
         addButton.onClick.AddListener(OnAddButtonClick);
         destroyButton.onClick.AddListener(OnDestroyButtonClick);
+        
+        tokenManager.OnLayerChanged += HandleLayerChange;
+
 
         OnTokenButtonClick();
     }
+    
+    private void HandleLayerChange()
+    {
+        switch (lastActiveLayer)
+        {
+            case 1:
+                OnTokenButtonClick();
+                break;
+            case 2:
+                OnGMButtonClick();
+                break;
+            case 3:
+                OnMapButtonClick();
+                break;
+        }
+    }
+
 
     private void OnAddButtonClick()
     {
