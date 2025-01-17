@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +16,10 @@ public class LayerManager : MonoBehaviour
     [SerializeField] private Button mapButton;
     [SerializeField] private Button addButton;
     [SerializeField] private Button destroyButton;
+    [SerializeField] private Button resizeButton;
+    
+    [SerializeField] private TMP_InputField inputFieldX;
+    [SerializeField] private TMP_InputField inputFieldY;
     
     [SerializeField] private TokenManager tokenManager;
 
@@ -21,6 +27,8 @@ public class LayerManager : MonoBehaviour
     private int lastActiveLayer; // 1 = token, 2 = gm, 3 = map
 
     [Range(0f, 1f)] [SerializeField] private float transparency = 0.5f;
+    
+    public event Action<float, float> OnResize;
 
     private void Start()
     {
@@ -30,6 +38,7 @@ public class LayerManager : MonoBehaviour
         mapButton.onClick.AddListener(OnMapButtonClick);
         addButton.onClick.AddListener(OnAddButtonClick);
         destroyButton.onClick.AddListener(OnDestroyButtonClick);
+        resizeButton.onClick.AddListener(HandleResize);
         
         tokenManager.OnLayerChanged += HandleLayerChange;
 
@@ -50,6 +59,19 @@ public class LayerManager : MonoBehaviour
             case 3:
                 OnMapButtonClick();
                 break;
+        }
+    }
+
+    private void HandleResize()
+    {
+        // Parse input values
+        if (float.TryParse(inputFieldX.text, out float x) && float.TryParse(inputFieldY.text, out float y))
+        {
+            OnResize?.Invoke(x, y); // Trigger resize event with the parsed values
+        }
+        else
+        {
+            Debug.LogError("Invalid input. Please enter valid numbers in the input fields.");
         }
     }
 

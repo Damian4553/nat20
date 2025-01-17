@@ -10,6 +10,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float minZoom = 2f; // Minimum zoom level (for orthographic or field of view)
     [SerializeField] private float maxZoom = 50f; // Maximum zoom level (for orthographic or field of view)
     [SerializeField] private GameObject container;
+    [SerializeField] private GridManager gridManager;
 
     private Vector3 dragOrigin; // Tracks the initial position of the mouse during dragging
     private Bounds cameraBounds;
@@ -18,12 +19,22 @@ public class CameraMovement : MonoBehaviour
     {
         if (container != null)
         {
-            // Calculate the bounds of the border object
-            Renderer renderer = container.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                cameraBounds = renderer.bounds;
-            }
+            CalculateBounds();
+        }
+        if (gridManager != null)
+        {
+            gridManager.OnGridResized += CalculateBounds; // Event handler for grid resizing
+        }
+        
+    }
+
+    private void CalculateBounds()
+    {
+        // Calculate the bounds of the border object
+        Renderer renderer = container.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            cameraBounds = renderer.bounds;
         }
     }
 
@@ -72,11 +83,6 @@ public class CameraMovement : MonoBehaviour
             {
                 // Adjust the orthographic size for 2D cameras
                 cam.orthographicSize = Mathf.Clamp(cam.orthographicSize - scroll * zoomSpeed, minZoom, maxZoom);
-            }
-            else
-            {
-                // Adjust the field of view for 3D cameras
-                cam.fieldOfView = Mathf.Clamp(cam.fieldOfView - scroll * zoomSpeed, minZoom, maxZoom);
             }
         }
     }

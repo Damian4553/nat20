@@ -12,11 +12,17 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject tilePrefab;
 
     [SerializeField] private GameObject frame;
+    
+    [SerializeField] private LayerManager layerManager;
+
+    public event Action OnGridResized;
 
 
     void Start()
     {
         GenerateGrid();
+
+        layerManager.OnResize += Resize;
     }
 
     void GenerateGrid()
@@ -56,5 +62,29 @@ public class GridManager : MonoBehaviour
             rowStartPosition.y -= newScaleY; 
         }
     }
+
+    private void Resize(float x, float y)
+    {
+        Debug.Log(x);
+        Debug.Log(y);
+        // Update container scale
+        container.transform.localScale = new Vector3(x, y);
+
+        // Clear existing grid
+        foreach (Transform child in container.transform)
+        {
+            if (child.gameObject.layer == LayerMask.NameToLayer("Grid"))
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        // Regenerate grid with the new scale
+        GenerateGrid();
+
+        OnGridResized?.Invoke();
+
+    }
+
 
 }

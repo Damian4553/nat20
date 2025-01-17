@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 1996841281741211641}
   - component: {fileID: 8477435547566232990}
   - component: {fileID: 9016202477249690499}
+  - component: {fileID: 1956118392552443819}
+  - component: {fileID: 8650258662189235072}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -54,6 +56,7 @@ MonoBehaviour:
   container: {fileID: 0}
   tilePrefab: {fileID: 3119299268135464851, guid: 3d8eb04d256686e43ac5440fae72bc93, type: 3}
   frame: {fileID: 0}
+  layerManager: {fileID: 0}
 --- !u!114 &5137077365666266258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,6 +77,9 @@ MonoBehaviour:
   mapButton: {fileID: 0}
   addButton: {fileID: 0}
   destroyButton: {fileID: 0}
+  resizeButton: {fileID: 0}
+  inputFieldX: {fileID: 0}
+  inputFieldY: {fileID: 0}
   tokenManager: {fileID: 9016202477249690499}
   transparency: 0.5
 --- !u!114 &1194383748655251373
@@ -165,3 +171,54 @@ MonoBehaviour:
     m_Bits: 64
   tokenLayerTransform: {fileID: 0}
   gmLayerTransform: {fileID: 0}
+--- !u!114 &1956118392552443819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153821101326506031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991ef9ff23b88b540a5f33b1df0c2edd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 0}
+  outputText: {fileID: 0}
+--- !u!114 &8650258662189235072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153821101326506031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkConfig:
+    ProtocolVersion: 0
+    NetworkTransport: {fileID: 0}
+    PlayerPrefab: {fileID: 0}
+    Prefabs:
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: 7ecb3a9ade353534aaa78d38dd41e141, type: 2}
+    TickRate: 30
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 0
+    ConnectionData: 
+    EnableTimeResync: 0
+    TimeResyncInterval: 30
+    EnsureNetworkVariableLengthSafety: 0
+    EnableSceneManagement: 1
+    ForceSamePrefabs: 1
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    SpawnTimeout: 1
+    EnableNetworkLogs: 1
+    OldPrefabList: []
+  RunInBackground: 1
+  LogLevel: 1
