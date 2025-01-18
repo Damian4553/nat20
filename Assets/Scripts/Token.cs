@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Token : MonoBehaviour
+public class Token : NetworkBehaviour
 {
     [SerializeField] private Size selectedSize;
 
@@ -49,10 +50,28 @@ public class Token : MonoBehaviour
                 print("No size chosen");
                 break;
         }
+
+        SubmitPositionRequestServerRpc(gameObject.transform.localScale);
     }
 
     public void TextUpdate(string newText)
     {
         gameObject.GetComponentInChildren<TextMeshProUGUI>().text = newText;
+    }
+    
+        
+    [ServerRpc(RequireOwnership = false)]
+    private void SubmitPositionRequestServerRpc(Vector3 newScale)
+    {
+
+        transform.localScale = newScale;
+        UpdatePositionClientRpc(newScale);
+    }
+    
+    [ClientRpc]
+    private void UpdatePositionClientRpc(Vector3 newScale)
+    {
+        // Synchronizacja pozycji na wszystkich klientach
+        transform.localScale = newScale;
     }
 }

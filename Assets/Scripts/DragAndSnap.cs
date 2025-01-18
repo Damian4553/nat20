@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class DragAndSnap : MonoBehaviour
+public class DragAndSnap : NetworkBehaviour
 {
     [SerializeField] private LayerMask snapLayer; // Layer mask for objects to snap to (set in inspector)
     private Camera mainCamera;
@@ -11,7 +12,8 @@ public class DragAndSnap : MonoBehaviour
 
     void Start()
     {
-        // Get the main camera
+        gameObject.GetComponent<NetworkObject>().Spawn();
+
         mainCamera = Camera.main;
     }
 
@@ -38,7 +40,6 @@ public class DragAndSnap : MonoBehaviour
             position = new Vector3(mousePosition.x, mousePosition.y, position.z);
             transform.position = position;
 
-            // Find the closest object to snap to
             FindClosestSnapObject();
         }
     }
@@ -59,11 +60,11 @@ public class DragAndSnap : MonoBehaviour
 
     void OnMouseUp()
     {
-        // Stop dragging the object and snap it
+
         if (isDragging && closestSnapObject != null && snap)
         {
-            // Snap to the closest object
             SnapToObject(closestSnapObject);
+            SubmitPositionRequestServerRpc(transform.position); // Wysyłamy zmiany na serwer
         }
 
         isDragging = false;
@@ -75,7 +76,7 @@ public class DragAndSnap : MonoBehaviour
         Bounds objectBounds = objectRenderer.bounds;
 
         Collider[] colliders =
-            Physics.OverlapSphere(new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z), .3f, snapLayer);
+            Physics.OverlapSphere(new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z), 0.3f, snapLayer);
         float closestDistance = Mathf.Infinity;
 
         closestSnapObject = null;
@@ -103,21 +104,32 @@ public class DragAndSnap : MonoBehaviour
                 Bounds objectBounds = objectRenderer.bounds;
                 Bounds targetBounds = targetRenderer.bounds;
 
-                // Calculate the top-left corner of the object and grid
                 Vector3 objectTopLeft = new Vector3(objectBounds.min.x, objectBounds.max.y, transform.position.z);
                 Vector3 gridTopLeft = new Vector3(targetBounds.min.x, targetBounds.max.y, transform.position.z);
 
-                // Align object's top-left corner to grid's top-left corner
                 Vector3 snappingOffset = gridTopLeft - objectTopLeft;
 
-                // Apply the offset
                 transform.position += snappingOffset;
             }
             else
             {
-                // Fallback to snapping to the target's position
                 transform.position = target.transform.position;
             }
         }
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SubmitPositionRequestServerRpc(Vector3 newPosition)
+    {
+
+        transform.position = newPosition;
+        UpdatePositionClientRpc(newPosition);
+    }
+    
+    [ClientRpc]
+    private void UpdatePositionClientRpc(Vector3 newPosition)
+    {
+        // Synchronizacja pozycji na wszystkich klientach
+        transform.position = newPosition;
     }
 }
